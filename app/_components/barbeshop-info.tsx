@@ -3,17 +3,12 @@ import { Barbershop } from "@prisma/client";
 import { CheckCircle2, MapPin, Smartphone, SmartphoneIcon } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { stringify } from "querystring";
 import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "./ui/alert-dialog";
 
 const BarbershopInfo = ({ barbershop }: { barbershop: Barbershop[] }) => {

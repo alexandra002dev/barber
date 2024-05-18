@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Header from "./_components/header";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -16,15 +16,9 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+
 } from "./_components/ui/card";
-import { Label } from "./_components/ui/label";
-import { Input } from "./_components/ui/input";
-import { Button } from "./_components/ui/button";
-import { MapPin } from "lucide-react";
+
 import BarbershopInfo from "./_components/barbeshop-info";
 
 const Home = async () => {

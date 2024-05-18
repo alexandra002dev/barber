@@ -1,5 +1,5 @@
+"use client";
 import { Prisma } from "@prisma/client";
-import Link from "next/link";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
