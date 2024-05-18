@@ -95,7 +95,8 @@ async function seedDatabase() {
         name: "Hidratação",
         description: "Hidratação profunda para cabelo e barba.",
         price: 25.0,
-        imageUrl: "Fios hidratados, macios e brilhantes.",
+        imageUrl:
+          "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png",
       },
     ];
 
@@ -105,6 +106,7 @@ async function seedDatabase() {
         address: "Travessa da Navalha, 101",
         imageUrl:
           "https://utfs.io/f/e995db6d-df96-4658-99f5-11132fd931e1-17j.png",
+        telephone: "(11) 1234-5678",
       },
     });
 
