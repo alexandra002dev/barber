@@ -22,9 +22,20 @@ const Home = async () => {
     select: {
       service: true,
       date: true,
+      id: true,
+      serviceId: true,
+      userId: true,
     },
   });
-  const service = await db.service.findMany({});
+  const service = await db.service.findMany({
+    include: {
+      barbershop: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 
   return (
     <>
