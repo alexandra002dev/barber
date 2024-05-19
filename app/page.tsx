@@ -1,4 +1,3 @@
-
 import Header from "./_components/header";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -13,17 +12,18 @@ import {
   TabsList,
   TabsTrigger,
 } from "./_components/ui/tabs";
-import {
-  Card,
-  CardContent,
-
-} from "./_components/ui/card";
+import { Card, CardContent } from "./_components/ui/card";
 
 import BarbershopInfo from "./_components/barbeshop-info";
 
 const Home = async () => {
   const barbershop = await db.barbershop.findMany({});
-  const booking = await db.booking.findMany({});
+  const booking = await db.booking.findMany({
+    select: {
+      service: true,
+      date: true,
+    },
+  });
   const service = await db.service.findMany({});
 
   return (

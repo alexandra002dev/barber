@@ -2,7 +2,6 @@
 import { LogInIcon, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { useState } from "react";
 import {
   Sheet,
@@ -12,9 +11,14 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { Button } from "./ui/button";
 
 const Header = () => {
+  const data = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const handleSignOutClick = () => signOut();
+  const handleSignInClick = () => signIn();
   return (
     <div className="flex justify-between px-5 pt-6">
       <Link href={"/"}>
@@ -29,6 +33,7 @@ const Header = () => {
           <SheetHeader>
             <SheetTitle className="text-left">Menu</SheetTitle>
           </SheetHeader>
+          <Button onClick={handleSignInClick}>Login</Button>
         </SheetContent>
       </Sheet>
     </div>
