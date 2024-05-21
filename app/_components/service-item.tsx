@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import Image from "next/image";
 import { ptBR, se } from "date-fns/locale";
 import { Button } from "./ui/button";
-import { ArrowDownIcon, MenuIcon, StarIcon } from "lucide-react";
+import { ArrowDownIcon, CheckCircle2, MenuIcon, StarIcon } from "lucide-react";
 import { formatCurrency } from "../_helpers/price";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -63,13 +63,17 @@ const ServiceItem = ({ service }: Props) => {
   const dateHours = service.bookings.map((booking) => {
     const date = booking.date;
 
-    const formattedTime = date.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    return { formattedTime };
+    return date;
   });
-  console.log(dateHours);
+  // const dateHours = service.bookings.map((booking) => {
+  //   const date = booking.date;
+
+  //   const formattedTime = date.toLocaleTimeString("pt-BR", {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
+  //   return { formattedTime };
+  // });
 
   const timeList = useMemo(() => {
     return date ? generateDayTimeList(date) : [];
@@ -77,7 +81,7 @@ const ServiceItem = ({ service }: Props) => {
 
   const handleBookinSubmit = async () => {
     try {
-      if (!hour && !data?.user) {
+      if (!hour && !date && !data?.user) {
         return;
       }
 
@@ -92,12 +96,12 @@ const ServiceItem = ({ service }: Props) => {
           userId: (data?.user as any).id,
           date: newDate,
         });
+        setAlertDialogo(true);
+        setTimeout(() => setAlertDialogo(false), 1000);
         setIsMenuOpen(false);
       }
     } catch (e) {
       console.log(e);
-      setAlertDialogo(true);
-      setTimeout(() => setAlertDialogo(false), 1000);
     }
   };
   return (
@@ -175,7 +179,7 @@ const ServiceItem = ({ service }: Props) => {
               {timeList
                 .filter(
                   (time) =>
-                    !dateHours.some((booked) => booked.formattedTime === time)
+                    !dateHours.some((booked) => booked.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) === time && booked.toDateString() === date.toDateString())
                 )
                 .map((time) => (
                   <div key={time} className="flex gap-3">
@@ -224,10 +228,14 @@ const ServiceItem = ({ service }: Props) => {
         </SheetContent>
       </Sheet>
       <AlertDialog open={alertDialogo} onOpenChange={setAlertDialogo}>
-        <AlertDialogContent className="w-[70vw] space-y-3 flex flex-col justify-center items-center rounded-md">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Esse horário está indisponível</AlertDialogTitle>
+        <AlertDialogContent className="w-[70vw] space-y-0 flex flex-col justify-center items-center rounded-md">
+          <AlertDialogHeader className="flex flex-col justify-center items-center">
+            <CheckCircle2 className="text-primary " size={80} />
+            <AlertDialogTitle>Reserva Efetuada!</AlertDialogTitle>
           </AlertDialogHeader>
+          <h3 className="text-center text-muted-foreground ">
+            Sua reserva foi agendada com sucesso.
+          </h3>
         </AlertDialogContent>
       </AlertDialog>
     </>
