@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { ArrowDownIcon, MenuIcon, StarIcon } from "lucide-react";
 import { formatCurrency } from "../_helpers/price";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +20,14 @@ import { generateDayTimeList } from "../_helpers/hours";
 import { saveBooking } from "../_actions/save-booking";
 import { setHours, setMinutes } from "date-fns";
 import { useSession } from "next-auth/react";
+import { db } from "../_lib/prisma";
+import { Dialog } from "@radix-ui/react-dialog";
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import {
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 
 interface Props {
   service: Prisma.ServiceGetPayload<{
@@ -27,6 +35,11 @@ interface Props {
       barbershop: {
         select: {
           name: true;
+        };
+      };
+      bookings: {
+        select: {
+          date: true;
         };
       };
     };
@@ -37,6 +50,8 @@ const ServiceItem = ({ service }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
+  const [alertDialogo, setAlertDialogo] = useState(false);
+
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
     setHour(undefined);
@@ -44,6 +59,18 @@ const ServiceItem = ({ service }: Props) => {
   const handleBooking = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const dateHours = service.bookings.map((booking) => {
+    const date = booking.date;
+
+    const formattedTime = date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    return { formattedTime };
+  });
+  console.log(dateHours);
+
   const timeList = useMemo(() => {
     return date ? generateDayTimeList(date) : [];
   }, [date]);
@@ -69,6 +96,8 @@ const ServiceItem = ({ service }: Props) => {
       }
     } catch (e) {
       console.log(e);
+      setAlertDialogo(true);
+      setTimeout(() => setAlertDialogo(false), 1000);
     }
   };
   return (
@@ -142,17 +171,22 @@ const ServiceItem = ({ service }: Props) => {
           />
           {/* Mostrar lista de horários apenas se alguma data estiver selecionada */}
           {date && (
-            <div className="flex overflow-x-scroll [&::-webkit-scrollbar]:hidden grid-cols-5 py-6 px-5 border-y border-solid border-secondary">
-              {timeList.map((time) => (
-                <Button
-                  variant={hour === time ? "default" : "outline"}
-                  key={time}
-                  onClick={() => setHour(time)}
-                  className="rounded-lg"
-                >
-                  {time}
-                </Button>
-              ))}
+            <div className="flex gap-2 overflow-x-scroll [&::-webkit-scrollbar]:hidden grid-cols-5 py-6 px-5 border-y border-solid border-secondary">
+              {timeList
+                .filter(
+                  (time) =>
+                    !dateHours.some((booked) => booked.formattedTime === time)
+                )
+                .map((time) => (
+                  <div key={time} className="flex gap-3">
+                    <Button
+                      variant={`${hour === time ? "default" : "outline"}`}
+                      onClick={() => setHour(time)}
+                    >
+                      {time}
+                    </Button>
+                  </div>
+                ))}
             </div>
           )}
           {date && hour && (
@@ -189,6 +223,13 @@ const ServiceItem = ({ service }: Props) => {
           </Button>
         </SheetContent>
       </Sheet>
+      <AlertDialog open={alertDialogo} onOpenChange={setAlertDialogo}>
+        <AlertDialogContent className="w-[70vw] space-y-3 flex flex-col justify-center items-center rounded-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Esse horário está indisponível</AlertDialogTitle>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

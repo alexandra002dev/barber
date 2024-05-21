@@ -9,6 +9,11 @@ interface Props {
           name: true;
         };
       };
+      bookings: {
+        select: {
+          date: true;
+        };
+      };
     };
   }>[];
 }
