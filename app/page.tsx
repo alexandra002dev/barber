@@ -25,6 +25,11 @@ const Home = async () => {
       service: true,
       user: true,
     },
+    where: {
+      user: {
+        email: session?.user?.email,
+      },
+    },
   });
   const service = await db.service.findMany({
     include: {
