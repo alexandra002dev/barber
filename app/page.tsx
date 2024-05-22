@@ -13,18 +13,17 @@ import {
   TabsTrigger,
 } from "./_components/ui/tabs";
 import { Card, CardContent } from "./_components/ui/card";
-
+import { authOptions } from "./_lib/auth";
 import BarbershopInfo from "./_components/barbeshop-info";
+import { getServerSession } from "next-auth";
 
 const Home = async () => {
+  const session = await getServerSession(authOptions);
   const barbershop = await db.barbershop.findMany({});
   const booking = await db.booking.findMany({
-    select: {
+    include: {
       service: true,
-      date: true,
-      id: true,
-      serviceId: true,
-      userId: true,
+      user: true,
     },
   });
   const service = await db.service.findMany({
@@ -41,22 +40,30 @@ const Home = async () => {
   return (
     <>
       <Header />
-      <div className="p-5 ">
-        <h1 className="text-lg">Olá, Alexandra</h1>
-        <p className="capitalize text-sm">
+      <div className="px-5 mb-5 mt-4">
+        <h1 className="text-lg">
+          {session?.user
+            ? `Olá, ${session.user.name?.split(" ")[0]}!`
+            : "Olá! Vamos agendar um corte hoje?"}
+        </h1>
+        <p className="capitalize text-sm text-primary">
           {format(new Date(), "EEEE',' dd 'de' MMMM", {
             locale: ptBR,
           })}
         </p>
       </div>
-      <div className="px-5">
-        <h2 className="text-xs uppercase text-gray-400 font-bold">
-          Agendamento
-        </h2>
-        <div className="mt-4">
-          <BookingList bookings={booking} />
+
+      {session?.user && (
+        <div className="px-5">
+          <h2 className="pl-5 text-xs mb-3 uppercase text-gray-400 font-bold">
+            Agendamentos
+          </h2>
+          <div className="mt-4">
+            <BookingList bookings={booking} />
+          </div>
         </div>
-      </div>
+      )}
+
       <div className="py-4">
         <Separator />
       </div>
