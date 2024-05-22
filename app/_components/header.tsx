@@ -81,11 +81,12 @@ const Header = () => {
               </Button>
             </div>
           )}
-
-          <Button className="w-full flex justify-start bg-transparent border border-solid border-secondary mt-3 gap-3 text-sm">
-            <Home size={20} />
-            Início
-          </Button>
+          <Link href={"/"}>
+            <Button className="w-full flex justify-start bg-transparent border border-solid border-secondary mt-3 gap-3 text-sm mb-2">
+              <Home size={20} />
+              Início
+            </Button>
+          </Link>
           {data.data?.user && (
             <Link href={"/booking"}>
               <Button className="w-full flex justify-start bg-transparent border border-solid border-secondary gap-3 text-sm">
