@@ -1,23 +1,26 @@
 import Header from "../_components/header";
 import { Separator } from "../_components/ui/separator";
-
-import BookingList from "../_components/booking-list";
 import { db } from "../_lib/prisma";
 import BookingItem from "../_components/booking-item";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../_components/ui/sheet";
-import { MenuIcon } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../_lib/auth";
+import { redirect } from "next/navigation";
 
 const BookingPage = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return redirect("/");
+  }
   const bookings = await db.booking.findMany({
     include: {
       service: true,
       user: true,
+    },
+    where: {
+      user: {
+        email: session?.user?.email,
+      },
     },
   });
   return (
