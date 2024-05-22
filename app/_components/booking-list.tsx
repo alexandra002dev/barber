@@ -1,7 +1,6 @@
 "use client";
 import { Prisma } from "@prisma/client";
 import BookingItem from "./booking-item";
-import { useSession } from "next-auth/react";
 
 interface Props {
   bookings: Prisma.BookingGetPayload<{
