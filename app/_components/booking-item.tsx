@@ -17,6 +17,12 @@ import { useState } from "react";
 import { formatCurrency } from "../_helpers/price";
 import { Button } from "./ui/button";
 import { cancelBooking } from "../_actions/cancel-booking";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 
 interface Props {
   booking: Prisma.BookingGetPayload<{
@@ -29,6 +35,7 @@ interface Props {
 }
 const BookingItem = ({ booking }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [alertDialogo, setAlertDialogo] = useState(false);
   const handleCancelClick = async () => {
     try {
       await cancelBooking(booking.id);
@@ -136,12 +143,36 @@ const BookingItem = ({ booking }: Props) => {
             >
               Voltar
             </Button>
-            <Button className="flex-1 bg-red-600" onClick={handleCancelClick}>
+            <Button
+              className="flex-1 bg-red-600"
+              onClick={() => setAlertDialogo(true)}
+            >
               Cancelar Reserva
             </Button>
           </div>
         </SheetContent>
       </Sheet>
+      <AlertDialog open={alertDialogo} onOpenChange={setAlertDialogo}>
+        <AlertDialogContent className="w-[70vw] space-y-0 flex flex-col justify-center items-center rounded-md">
+          <AlertDialogHeader className="flex flex-col justify-center items-center">
+            <AlertDialogTitle>Sair</AlertDialogTitle>
+          </AlertDialogHeader>
+          <h3 className="text-center text-muted-foreground text-sm">
+            Deseja mesmo sair da plataforma?
+          </h3>
+          <div className="flex w-full gap-2">
+            <Button
+              className="flex-1 bg-secondary"
+              onClick={() => setAlertDialogo(false)}
+            >
+              Cancelar
+            </Button>
+            <Button className="flex-1 bg-red-600" onClick={handleCancelClick}>
+              Confirmar
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
