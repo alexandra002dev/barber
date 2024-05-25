@@ -153,9 +153,7 @@ const BookingItem = ({ booking }: Props) => {
       </Sheet>
       <AlertDialog open={alertDialogo} onOpenChange={setAlertDialogo}>
         <AlertDialogContent className="w-[70vw] space-y-0 flex flex-col justify-center items-center rounded-md">
-          <AlertDialogHeader className="flex flex-col justify-center items-center">
-            <AlertDialogTitle>Sair</AlertDialogTitle>
-          </AlertDialogHeader>
+          <AlertDialogHeader className="flex flex-col justify-center items-center"></AlertDialogHeader>
           <h3 className="text-center text-muted-foreground text-sm">
             Deseja mesmo cancelar a reserva?
           </h3>
