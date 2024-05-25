@@ -2,17 +2,11 @@
 import { Prisma } from "@prisma/client";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { useState } from "react";
 import { formatCurrency } from "../_helpers/price";
 import { Button } from "./ui/button";
@@ -23,6 +17,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { fetchBookingData } from "../api/data";
+import { useSession } from "next-auth/react";
 
 interface Props {
   booking: Prisma.BookingGetPayload<{
@@ -36,6 +32,7 @@ interface Props {
 const BookingItem = ({ booking }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [alertDialogo, setAlertDialogo] = useState(false);
+  const session = useSession();
   const handleCancelClick = async () => {
     try {
       await cancelBooking(booking.id);
@@ -44,6 +41,8 @@ const BookingItem = ({ booking }: Props) => {
     } catch (error) {
       console.error(error);
     } finally {
+      setMenuOpen(false);
+      setAlertDialogo(false);
     }
   };
   return (
@@ -158,7 +157,7 @@ const BookingItem = ({ booking }: Props) => {
             <AlertDialogTitle>Sair</AlertDialogTitle>
           </AlertDialogHeader>
           <h3 className="text-center text-muted-foreground text-sm">
-            Deseja mesmo sair da plataforma?
+            Deseja mesmo cancelar a reserva?
           </h3>
           <div className="flex w-full gap-2">
             <Button

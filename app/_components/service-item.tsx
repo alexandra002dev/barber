@@ -1,17 +1,12 @@
 "use client";
-import {Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import Image from "next/image";
 import { ptBR } from "date-fns/locale";
 import { Button } from "./ui/button";
-import {  CheckCircle2,  StarIcon } from "lucide-react";
+import { CheckCircle2, StarIcon } from "lucide-react";
 import { formatCurrency } from "../_helpers/price";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { Calendar } from "./ui/calendar";
 import { generateDayTimeList } from "../_helpers/hours";
 import { saveBooking } from "../_actions/save-booking";
@@ -86,6 +81,8 @@ const ServiceItem = ({ service }: Props) => {
         setAlertDialogo(true);
         setTimeout(() => setAlertDialogo(false), 1000);
         setIsMenuOpen(false);
+        setDate(undefined);
+        setHour(undefined);
       }
     } catch (e) {
       console.log(e);
