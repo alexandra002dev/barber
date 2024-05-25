@@ -75,7 +75,7 @@ const Home = () => {
     <>
       <Header />
       <div className="px-5 mb-5 mt-4">
-        <h1 className="text-lg">
+        <h1 className="text-lg capitalize">
           {session.data?.user
             ? `Olá, ${session.data.user.name?.split(" ")[0]}!`
             : "Olá! Vamos agendar um corte hoje?"}
