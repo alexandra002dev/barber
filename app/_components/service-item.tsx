@@ -11,7 +11,7 @@ import { Calendar } from "./ui/calendar";
 import { generateDayTimeList } from "../_helpers/hours";
 import { saveBooking } from "../_actions/save-booking";
 import { setHours, setMinutes } from "date-fns";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { AlertDialog } from "@radix-ui/react-alert-dialog";
 import {
   AlertDialogContent,
@@ -42,6 +42,7 @@ const ServiceItem = ({ service }: Props) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
   const [alertDialogo, setAlertDialogo] = useState(false);
+  const [alertDialogoLogin, setAlertDialogoLogin] = useState(false);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -66,7 +67,9 @@ const ServiceItem = ({ service }: Props) => {
       if (!hour && !date && !data?.user) {
         return;
       }
-
+      if (!data?.user) {
+        setAlertDialogoLogin(true);
+      }
       if (date && hour && data?.user) {
         const dateHour = Number(hour.split(":")[0]);
         const dateMinutes = Number(hour.split(":")[1]);
@@ -227,6 +230,18 @@ const ServiceItem = ({ service }: Props) => {
           <h3 className="text-center text-muted-foreground ">
             Sua reserva foi agendada com sucesso.
           </h3>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={alertDialogoLogin} onOpenChange={setAlertDialogoLogin}>
+        <AlertDialogContent className="w-[70vw] space-y-0 flex flex-col justify-center items-center rounded-md">
+          <AlertDialogHeader className="flex flex-col justify-center items-center">
+            <CheckCircle2 className="text-primary " size={80} />
+            <AlertDialogTitle>
+              Faça Login, para fazer sua reserva!
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <Button onClick={() => signIn()}>Fazer Login</Button>
         </AlertDialogContent>
       </AlertDialog>
     </>
