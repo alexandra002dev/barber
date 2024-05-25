@@ -1,33 +1,29 @@
 "use client";
-import { Barbershop, Prisma } from "@prisma/client";
+import {Prisma } from "@prisma/client";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import Image from "next/image";
-import { ptBR, se } from "date-fns/locale";
+import { ptBR } from "date-fns/locale";
 import { Button } from "./ui/button";
-import { ArrowDownIcon, CheckCircle2, MenuIcon, StarIcon } from "lucide-react";
+import {  CheckCircle2,  StarIcon } from "lucide-react";
 import { formatCurrency } from "../_helpers/price";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "./ui/sheet";
 import { Calendar } from "./ui/calendar";
 import { generateDayTimeList } from "../_helpers/hours";
 import { saveBooking } from "../_actions/save-booking";
 import { setHours, setMinutes } from "date-fns";
 import { useSession } from "next-auth/react";
-import { db } from "../_lib/prisma";
-import { Dialog } from "@radix-ui/react-dialog";
 import { AlertDialog } from "@radix-ui/react-alert-dialog";
 import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { useMemo, useState } from "react";
 
 interface Props {
   service: Prisma.ServiceGetPayload<{
@@ -65,15 +61,6 @@ const ServiceItem = ({ service }: Props) => {
 
     return date;
   });
-  // const dateHours = service.bookings.map((booking) => {
-  //   const date = booking.date;
-
-  //   const formattedTime = date.toLocaleTimeString("pt-BR", {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   });
-  //   return { formattedTime };
-  // });
 
   const timeList = useMemo(() => {
     return date ? generateDayTimeList(date) : [];
@@ -179,7 +166,14 @@ const ServiceItem = ({ service }: Props) => {
               {timeList
                 .filter(
                   (time) =>
-                    !dateHours.some((booked) => booked.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) === time && booked.toDateString() === date.toDateString())
+                    !dateHours.some(
+                      (booked) =>
+                        booked.toLocaleTimeString("pt-BR", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }) === time &&
+                        booked.toDateString() === date.toDateString()
+                    )
                 )
                 .map((time) => (
                   <div key={time} className="flex gap-3">

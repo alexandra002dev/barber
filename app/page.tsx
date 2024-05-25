@@ -1,7 +1,6 @@
 import Header from "./_components/header";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import SearchInput from "./_components/search";
 import { db } from "./_lib/prisma";
 import BookingList from "./_components/booking-list";
 import ServiceList from "./_components/service-list";
@@ -80,14 +79,8 @@ const Home = async () => {
           </TabsList>
           <TabsContent value="service">
             <Card className="mb-3">
-              <div className="px-2 py-2">
-                <SearchInput />
-              </div>
               <CardContent className="space-y-2 px-2">
                 <div className="">
-                  <h2 className="text-xs uppercase text-gray-400 font-bold">
-                    Serviços
-                  </h2>
                   <div className="mt-4">
                     <ServiceList services={service} />
                   </div>

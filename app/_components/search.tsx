@@ -11,6 +11,8 @@ const SearchInput = () => {
   const handleSearchSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (!search) return;
+
+    router.push(`/service?search=${search}`);
   };
 
   return (
