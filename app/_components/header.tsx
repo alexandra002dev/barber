@@ -75,7 +75,7 @@ const Header = () => {
                   <AvatarImage src={data.data?.user?.image} alt="Avatar" />
                 )}
               </Avatar>
-              <h1>{data.data.user.name}</h1>
+              <h1 className="capitalize">{data.data.user.name}</h1>
               <Button size="icon" onClick={() => setAlertDialogo(true)}>
                 <LogOut size={20} />
               </Button>
