@@ -15,10 +15,7 @@ import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
-  AlertDialogTitle,
 } from "./ui/alert-dialog";
-import { fetchBookingData } from "../api/data";
-import { useSession } from "next-auth/react";
 
 interface Props {
   booking: Prisma.BookingGetPayload<{
@@ -32,7 +29,7 @@ interface Props {
 const BookingItem = ({ booking }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [alertDialogo, setAlertDialogo] = useState(false);
-  const session = useSession();
+
   const handleCancelClick = async () => {
     try {
       await cancelBooking(booking.id);

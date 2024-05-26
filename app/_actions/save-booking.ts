@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { db } from "../_lib/prisma";
 
 interface SaveBookingParams {
@@ -8,17 +9,6 @@ interface SaveBookingParams {
   date: Date;
 }
 export const saveBooking = async (booking: SaveBookingParams) => {
-  // Verifica se já existe uma reserva para o horário solicitado
-  // const existingAppointment = await db.booking.findUnique({
-  //   where: {
-  //     date: booking.date,
-  //   },
-  // });
-
-  // if (existingAppointment) {
-  //   console.log("Já existe uma reserva para este horário");
-  //   return;
-  // }
   await db.booking.create({
     data: {
       date: booking.date,
@@ -26,4 +16,5 @@ export const saveBooking = async (booking: SaveBookingParams) => {
       userId: booking.userId,
     },
   });
+  revalidatePath("/");
 };
